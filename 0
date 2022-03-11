@@ -1,0 +1,116 @@
+.open database.db
+sqlite> .mode box
+sqlite> .output base.txt
+sqlite> .dump
+sqlite>////////////////////////////////////////////////////////
+ .read data.txt
+Error: cannot open "data.txt"
+sqlite> .read database.txt
+Parse error near line 1: near "┌────┬──────────────┐": syntax error
+  ┌────┬──────────────┐ │ id │   m
+  ^--- error here
+sqlite> .read base.txt
+sqlite> .tables
+hello
+sqlite> select * from hello;
+1|hello,world!
+2|bye,bye
+sqlite> .mode box
+sqlite> select * from hello;
+┌────┬──────────────┐
+│ id │   message    │
+├────┼──────────────┤
+│ 1  │ hello,world! │
+│ 2  │ bye,bye      │
+└────┴──────────────┘
+sqlite> .open database.db
+sqlite> .read base.txt
+sqlite> create table person(id integer not null primary key autoincrement,firstname not null text,
+   ...> lastname not null text);
+Parse error: near "text": syntax error
+  null primary key autoincrement,firstname not null text,  lastname not null tex
+                                      error here ---^
+sqlite> lastname text not null);
+Parse error: near "lastname": syntax error
+  lastname text not null);
+  ^--- error here
+sqlite> create table person(id integer not null primary key autoincrement,
+   ...>    firstname text not null, lastname text not null);
+sqlite> create table person(id integer not null primary key autoincrement,
+   ...> insert into person(firstname,lastname) values
+   ...> ('',"");
+Parse error: table person already exists
+  create table person(id integer not null primary key autoincrement, insert into
+               ^--- error here
+sqlite> insert into person(firstname,lastname) values('','');
+sqlite> insert into person(firstname,lastname) values('',"");
+sqlite> select * from person
+   ...> ;
+┌────┬───────────┬──────────┐
+│ id │ firstname │ lastname │
+├────┼───────────┼──────────┤
+│ 1  │           │          │
+│ 2  │           │          │
+└────┴───────────┴──────────┘
+sqlite> delete from person where id=1;
+sqlite> select * from person;
+┌────┬───────────┬──────────┐
+│ id │ firstname │ lastname │
+├────┼───────────┼──────────┤
+│ 2  │           │          │
+└────┴───────────┴──────────┘
+sqlite> insert into person(firstname,lastname) values('John','Doe');
+sqlite> insert into person(firstname,lastname) values('Иван','Иванов');
+sqlite> select * from person
+   ...> ;
+┌────┬───────────┬──────────┐
+│ id │ firstname │ lastname │
+├────┼───────────┼──────────┤
+│ 2  │           │          │
+│ 3  │ John      │ Doe      │
+│ 4  │ Иван      │ Иванов   │
+└────┴───────────┴──────────┘
+sqlite> .schema person
+CREATE TABLE person(id integer not null primary key autoincrement,
+   firstname text not null, lastname text not null);
+sqlite> create table passport(id integer not null primary key autoincrement,)
+   ...>    firstname text not null, lastname text not null);
+Parse error: near ")": syntax error
+  ort(id integer not null primary key autoincrement,)    firstname text not null
+                                      error here ---^
+sqlite> create table passport(id integer not null primary key autoincrement,
+   ...>    firstname text not null, lastname text not null);
+sqlite> drop table passport;
+sqlite> .tables
+hello   person
+sqlite> create table passport (id integer not null primary key autoincrement,)
+   ...>    firstname text not null, lastname text not null, id person integer);
+Parse error: near ")": syntax error
+  rt (id integer not null primary key autoincrement,)    firstname text not null
+                                      error here ---^
+sqlite> create table passport(id integer not null primary key autoincrement,
+   ...>  number text not null, id_person integer);
+sqlite> insert into passport(number,id_person) values('MB2342347',3);
+sqlite> select * from passport
+   ...> ;
+┌────┬───────────┬───────────┐
+│ id │  number   │ id_person │
+├────┼───────────┼───────────┤
+│ 1  │ MB2342347 │ 3         │
+└────┴───────────┴───────────┘
+sqlite> select firstname, lastname,number from person inner join passport on person.id=passport.id_passport
+   ...> ;
+Parse error: no such column: passport.id_passport
+  mber from person inner join passport on person.id=passport.id_passport ;
+                                      error here ---^
+sqlite> select firstname, lastname, number from person inner join passport on person.id=passport.id_passport;
+Parse error: no such column: passport.id_passport
+  mber from person inner join passport on person.id=passport.id_passport;
+                                      error here ---^
+sqlite> select firstname, lastname, number from person inner join passport on person.id=passport.id_person;
+┌───────────┬──────────┬───────────┐
+│ firstname │ lastname │  number   │
+├───────────┼──────────┼───────────┤
+│ John      │ Doe      │ MB2342347 │
+└───────────┴──────────┴───────────┘
+sqlite>
