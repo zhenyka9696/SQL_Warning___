@@ -1,0 +1,31 @@
+Use ".open FILENAME" to reopen on a persistent database.
+sqlite> .open test.db
+sqlite> .tables
+test   test2  test3
+sqlite> insert into test3(id, string) values(1,'123');
+sqlite> select * from test3;
+1|123|
+sqlite> .mode box
+sqlite> select * from test3;
+┌────┬────────┬─────────┐
+│ id │ string │ string2 │
+├────┼────────┼─────────┤
+│ 1  │ 123    │         │
+└────┴────────┴─────────┘
+select * from test3;
+┌────┬────────┬─────────┐
+│ id │ string │ string2 │
+├────┼────────┼─────────┤
+│ 1  │ 123    │         │
+└────┴────────┴─────────┘
+sqlite> insert into test3(id, string, string2) values(1,'123','');
+sqlite> select * from test3;
+┌────┬────────┬─────────┐
+│ id │ string │ string2 │
+├────┼────────┼─────────┤
+│ 1  │ 123    │         │
+│ 1  │ 123    │         │
+└────┴────────┴─────────┘
+sqlite> select * from test3 where string2 is null;
+┌────┬────────┬─────────┐
+│ id │ string │ stri
